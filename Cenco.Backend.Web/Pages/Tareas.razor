@@ -1,0 +1,51 @@
+﻿@using Cenco.Backend.Entities;
+@using Cenco.Backend.DataContext.Interfaces;
+@inject IRepository<Tarea> Service;
+@page "/tareas"
+
+<PageTitle>Tareas del Sistema</PageTitle>
+
+
+
+<h1>Lista de tareas del Sistema</h1>
+
+@if (tareas == null)
+{
+    <p><em>Cargando tareas...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tarea in tareas)
+            {
+                <tr>
+                    <td>@tarea.titulo</td>
+                    <td>@tarea.descripcion</td>
+                    <td>@tarea.estado</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">Editar</button>
+                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Tarea[]? tareas;
+
+    protected override void OnInitialized()
+    {
+        tareas = Service.ListBy(x => x.fecha_eliminacion == null).ToArray();
+    }
+}

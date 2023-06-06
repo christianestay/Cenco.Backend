@@ -1,0 +1,51 @@
+﻿@using Cenco.Backend.Entities;
+@using Cenco.Backend.DataContext.Interfaces;
+@inject IRepository<Usuario> Service;
+@page "/usuarios"
+
+<PageTitle>Usuarios del Sistema</PageTitle>
+
+
+
+<h1>Lista de usuarios del Sistema</h1>
+
+@if (usuarios == null)
+{
+    <p><em>Cargando usuarios...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in usuarios)
+            {
+                <tr>
+                    <td>@usuario.nombres</td>
+                    <td>@usuario.apellidos</td>
+                    <td>@usuario.email</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">Editar</button>
+                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Usuario[]? usuarios;
+
+    protected override void OnInitialized()
+    {
+        usuarios = Service.ListBy(x => x.fecha_eliminacion == null).ToArray();
+    }
+}
